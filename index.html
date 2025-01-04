@@ -205,6 +205,34 @@
             margin-top: 50px;  
             font-size: 0.9em;  
         }  
+        /* Ajustements pour les écrans mobiles */
+@media (max-width: 768px) {
+    .search-input {
+        width: 90%; /* Prendre plus d'espace sur les petits écrans */
+    }
+
+    .category-container {
+        flex-direction: column; /* Empiler les catégories */
+        align-items: center;
+    }
+
+    .carousel {
+        height: 300px; /* Réduction de la hauteur pour mobile */
+    }
+
+    .carousel-item img {
+        width: 90%; /* Ajustement de la taille des images */
+    }
+
+    .nav-btn {
+        padding: 8px; /* Réduction de la taille des boutons */
+    }
+
+    .preview-item {
+        width: 80px; /* Réduction des aperçus */
+        height: 80px;
+    }
+}
     </style>  
 </head>  
 <body>  
@@ -344,7 +372,39 @@
         if (touchStartX > touchEndX + 50) nextSlide();
         if (touchStartX < touchEndX - 50) prevSlide();
     });
+// Fonction pour les diaporamas
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel-item');
 
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        if (i === index) slide.classList.add('active');
+    });
+}
+
+function prevSlide() {
+    currentSlide = (currentSlide > 0) ? currentSlide - 1 : slides.length - 1;
+    showSlide(currentSlide);
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide < slides.length - 1) ? currentSlide + 1 : 0;
+    showSlide(currentSlide);
+}
+
+// Support des interactions tactiles
+let startX = 0;
+
+document.querySelector('.carousel').addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+});
+
+document.querySelector('.carousel').addEventListener('touchend', (e) => {
+    let endX = e.changedTouches[0].clientX;
+    if (endX < startX) nextSlide(); // Balayage vers la gauche
+    if (endX > startX) prevSlide(); // Balayage vers la droite
+});
 </script>  
 </div>  
 
